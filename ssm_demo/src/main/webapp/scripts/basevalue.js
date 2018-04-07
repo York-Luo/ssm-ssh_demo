@@ -1,0 +1,1 @@
+var path="http://localhost:8082/cloudnote1";
