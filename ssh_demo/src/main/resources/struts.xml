@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+/*
+ * $Id: struts-default.xml 1406052 2012-11-06 06:19:04Z lukaszlenart $
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+-->
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- 登录相关的功能 -->
+	<package name="main" namespace="/main" extends="struts-default">
+		<!-- 打开登录页面 -->
+		<!-- class属性不写，默认调用actionsupport -->
+		<action name="toLogin">
+			<result>
+				/WEB-INF/main/login.jsp
+			</result>
+		</action>
+		<!-- 打开主页 -->
+		<action name="toIndex">
+			<result>/WEB-INF/main/index.jsp</result>
+		</action>
+		<!-- 登录检查 -->
+		<action name="login" class="cn.tedu.action.LoginAction">
+			<!-- 重定向到主页 -->
+			<result type="redirectAction"> 
+				<!-- 此处可以省略不写,其默认如下 -->
+				<!-- <param name="namespace">/main</param> -->
+				<!-- <param name="method">execute</param> -->
+				<param name="actionName">toIndex</param>
+			</result>
+			<!-- 转发到login.jsp -->
+			<result name="error">
+				/WEB-INF/main/login.jsp
+			</result>
+		</action>
+		<!-- 生成验证码 -->
+		<action name="verifycode" class="cn.tedu.action.VerifyCodeAction">
+			<!-- 该Result可以输出二进制数据 -->
+			<result type="stream">
+				<!-- 告诉result要输出哪个属性的值 -->
+				<param name="inputName">imgStream</param>
+			</result>
+		</action>
+	</package>
+	<package name="cost" namespace="/cost" extends="json-default"> 
+		<action name="toAdd">
+			<result>/WEB-INF/cost/add.jsp</result>
+		</action>
+		<!-- 检查资费名是否有效 -->
+		<action name="checkCostName" class="checkCostNameAction">
+			<result type="json" name="success">
+				<param name="includeProperties" >costName,pass</param>
+			</result>
+			<result type="json" name="error">
+				<param name="includeProperties">costName,pass</param>
+			</result>
+		</action>
+	</package>
+</struts>
